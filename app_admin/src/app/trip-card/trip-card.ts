@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Trip } from '../models/trips'; 
+import { Trip } from '../models/trips';
+import { AuthenticationService } from '../services/authentication'; // <-- New import
 
 @Component({
   selector: 'app-trip-card',
@@ -13,7 +14,11 @@ import { Trip } from '../models/trips';
 export class TripCard implements OnInit {
   @Input('trip') trip: any;
 
-  constructor(private router: Router) {}
+  // <-- Inject the authenticationService here
+  constructor(
+    private router: Router,
+    private authenticationService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -21,5 +26,10 @@ export class TripCard implements OnInit {
     localStorage.removeItem('tripCode');
     localStorage.setItem('tripCode', trip.code);
     this.router.navigate(['edit-trip']);
+  }
+
+  // <-- Add the method to check login status
+  public isLoggedIn(): boolean {
+    return this.authenticationService.isLoggedIn();
   }
 }

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { TripCard } from '../trip-card/trip-card';
 import { TripDataService } from '../services/trip-data';
 import { Trip } from '../models/trips';
+import { AuthenticationService } from '../services/authentication';
 
 @Component({
   selector: 'app-trip-listing',
@@ -19,13 +20,18 @@ export class TripListing implements OnInit {
   constructor(
     private tripDataService: TripDataService,
     private router: Router,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private authenticationService: AuthenticationService
   ) { 
     console.log('trip-listing constructor');
   }
 
   public addTrip(): void {
     this.router.navigate(['add-trip']);
+  }
+
+  public isLoggedIn(): boolean {
+    return this.authenticationService.isLoggedIn();
   }
 
   private getStuff(): void {
@@ -39,7 +45,6 @@ export class TripListing implements OnInit {
             this.message = 'There were no trips retrieved from the database';
           }
           console.log(this.message);
-          
           
           this.cdr.detectChanges(); 
         },
